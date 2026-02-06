@@ -1,9 +1,9 @@
 #include 'totvs.ch'
 
 /*/{Protheus.doc} U_WORK_QUERY_SQL
-(Função auxilar para demontrar o funcionamento de querys em Advpl)
+(Exemplo de escopo de funÃ§Ã£o)
 @type user function
-@author user
+@author Dario Leandro
 @since 13/11/2025
 /*/
 function U_ESCOPO
