@@ -1,0 +1,51 @@
+{
+	"configurations": [
+		{
+			"type": "totvs_language_web_debug",
+			"request": "launch",
+			"name": "Smart Client Web Debug",
+			"program": "${command:AskForProgramName}",
+			"isMultiSession": true,
+			"enableTableSync": true,
+			"smartClienteUrl": "https://srverp/webapp/",
+			"enableMultiThread": true
+		}
+	],
+	"lastPrograms": [
+		{
+			"label": "U_WORK_QUERY_SQL"
+		},
+		{
+			"label": "U_WORK_QUERY_SQL1"
+		},
+		{
+			"label": "U_ARQUIVO_TEMP_1"
+		},
+		{
+			"label": "apsdu"
+		},
+		{
+			"label": "U_ARQUIVO_TEMP_2"
+		},
+		{
+			"label": "U_ARQUIVO_TEMP_3"
+		},
+		{
+			"label": "U_FUNCAO_BANCO_DE_DADOS"
+		},
+		{
+			"label": "U_CRIAR_TXT"
+		},
+		{
+			"label": "U_CRIAR_TXT_MACRO"
+		},
+		{
+			"label": "U_CRIAR_TXT_2"
+		},
+		{
+			"label": "U_CRIAR_TXT_4"
+		}
+	],
+	"lastProgramExecuted": "U_CRIAR_TXT_4",
+	"lastProgramArguments": []
+}

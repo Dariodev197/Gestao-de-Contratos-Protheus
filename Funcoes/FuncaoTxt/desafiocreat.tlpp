@@ -1,0 +1,75 @@
+#include 'totvs.ch'
+
+/*/{Protheus.doc} U_CRIAR_TXT
+(FUNÇÃO PARA CRIAR ARQUIVOS TEXTO)
+@type user function
+@author Dario Leandro
+@since 29/01/2026
+/*/
+
+function U_CRIAR_TXT_2
+
+    Local cSaveFile as character
+    Local cBuffer   as character
+    Local nBuffer   as numeric
+    Local nHandle   as numeric
+    Local nWrite    as numeric
+
+    rpcSetEnv('99','01')
+
+        cSaveFile := "C:\Temp\ListaCliFor.txt"
+         If File(cSaveFile)
+            fErase(cSaveFile)
+        EndIf
+
+        nHandle := fCreate(cSaveFile)
+
+        If nhandle < 0 
+            fwAlertError("Erro ao efetuar a criação do Arquivo. Codigo do erro:" + Str(fError(),4), "ERRO")
+            rpcClearEnv()
+            return .F.
+        EndIf
+
+        cBuffer := padr("ENTIDADE",10) + padr("CODIGO",10) + padr("LOJA",5) +  padr("NOME",35) + padr("DT_NASCI" ,2)
+        nBuffer := len(cBuffer)
+
+        nWrite  := fWrite(nHandle,cBuffer)
+
+        If nWrite <> nBuffer
+            fwAlertError("Erro ao efetuar a gravação do Arquivo. Codigo do erro:" + Str(fError(),4), "ERRO")
+            fClose(nHandle)
+            rpcClearEnv()
+            return .F.
+        EndIf
+
+        cBuffer := CRLF + strtran(space(80)," ","-")
+        nBuffer := len(cBuffer)
+
+        nWrite  := fWrite(nHandle,cBuffer)
+
+        If nWrite <> nBuffer
+            fwAlertError("Erro ao efetuar a gravação do Arquivo. Codigo do erro:" + Str(fError(),4), "ERRO")
+            fClose(nHandle)
+            rpcClearEnv()
+            return .F.
+        EndIf 
+        
+        cPrefixo := '
+        bBloco := {|| cPrefixo := substr(alias(),2,2),;
+                      cBuffer := CRLF +;
+                                 padr(alias(),10) +;
+                                 padr((&cPrefixo + "_COD"),10) +;
+                                 padr((&cPrefixo + "_LOJA"),05) +;
+                                 padr(LEFT((&cPrefixo + "_NOME"),30),35)+;
+                                 padr(dtoc((&cPrefixo + "_DTNASC")),20),;
+                                 fWrite(nHandle,cBuffer)}
+
+         SA1->(dbEval(bBloco))
+         SA2->(dbEval(bBloco))
+
+
+        fClose(nHandle)
+
+    rpcClearEnv()
+
+Return

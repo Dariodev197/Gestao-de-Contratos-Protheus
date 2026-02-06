@@ -1,0 +1,70 @@
+#include 'totvs.ch'
+
+/*/{Protheus.doc} U_CRIAR_TXT_3
+(Função Para manipular textos)
+@type user function
+@author Dario Leandro
+@since 13/11/2025
+/*/
+function U_CRIAR_TXT_4
+
+	Local cSaveFile  as character
+	Local cBuffer    as character
+	Local oArqTxt    as object
+	Local lExist     as logical
+	Local lArqTxt    as logical
+	Local lWrite     as logical
+
+
+	rpcSetEnv('99','01')
+
+	cSaveFile := "C:\Temp\ListaCliFor.txt"
+	lExist    := File(cSaveFile)
+	oArqTxt   := fwFileWriter():new(cSaveFile,.F.)
+
+	if lExist
+		lArqTxt   :=  oArqTxt:open(2)
+
+		If lArqTxt
+			oArqTxt:clear()
+		else
+			fwAlertError(oArqTxt:error():message,'Erro na abertura do ARQUIVO')
+			rpcClearEnv()
+			Return.F.
+		endif
+	else
+		lArqTxt     := oArqTxt:create()
+		If .not. lArqTxt
+			fwAlertError(oArqTxt:error():message,'Erro na abertura do ARQUIVO')
+			rpcClearEnv()
+			Return.F.
+		endif
+
+	endif
+
+	cBuffer := padr("ENTIDADE",10) + padr("CODIGO",10) + padr("LOJA",5) +  padr("NOME",35) + padr("DT_NASCI" ,2)
+	lWrite  := oArqTxt:writer(cBuffer)
+	If .not. lWrite
+		fwAlertError(oArqTxt:error():message,'Erro na abertura do ARQUIVO')
+		rpcClearEnv()
+		Return.F.
+	endif
+	cBuffer := CRLF + strtran(space(80)," ","-")
+	oArqTxt:writer(cBuffer)
+    bBloco := {|| cPrefixo := substr(alias(),2,2),;
+                      cBuffer := CRLF +;
+                                 padr((&cPrefixo + "_COD"),10) +;
+                                 padr((&cPrefixo + "_LOJA"),05) +;
+                                 padr(LEFT((&cPrefixo + "_NOME"),30),35)+;
+                                 padr(dtoc((&cPrefixo + "_DTNASC")),20),;
+								 padr(alias(),10) +;
+                                 oArqTxt:writer(cBuffer)}
+
+    SA1->(dbEval(bBloco))
+    SA2->(dbEval(bBloco))
+
+    oArqTxt:fClose()
+
+	rpcClearEnv()
+
+Return

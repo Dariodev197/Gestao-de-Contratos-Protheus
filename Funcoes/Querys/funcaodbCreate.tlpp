@@ -1,0 +1,59 @@
+#include 'totvs.ch'
+
+/*/{Protheus.doc} U_WORK_QUERY_SQL
+(Função para criar arquivos temporarios usando o funcos de banco de dados)
+@type user function
+@author Dario
+@since 28/01/2026
+/*/
+function U_FUNCAO_BANCO_DE_DADOS
+
+    rpcSetEnv('99','01')
+
+        aCampos   := {{"ENTIDADE","C",3,0} ,{"CODIGO","C",6,0},{"LOJA","C",2,0},{"NOME","C",30,0},{"DTNASC", "D", 8,0}}
+        cAliasTab := "TABLE_ENT"
+
+        If tcCanOpen(cAliasTab)
+            tcDelFile(cAliasTab)
+        EndIf
+
+        dbCreate(cAliasTab,aCampos,"TOPCONN")
+        dbUseArea(.T., "TOPCONN", cAliasTab,cAliasTab,.T.,.F.)
+        dbCreateIndex(cAliasTab+"1","CODIGO+LOJA+ENTIDADE",{|| CODIGO+LOJA+ENTIDADE})
+        dbSetIndex(cAliasTab+'1')
+
+        SA1->(dbSetOrder(1))
+
+        while .not. SA1->(eof())
+
+            dbAppend()
+            ENTIDADE        := "SA1"
+            CODIGO          := SA1->A1_COD
+            LOJA            := SA1->A1_LOJA
+            NOME            := SA1->A1_NOME
+            DATA_NASCIMENTO := SA1->A1_DTNASC
+            dbCommit()
+
+            SA1->(dbSkip())
+        Enddo
+    
+         SA2->(dbSetOrder(1))
+
+        while .not. SA2->(eof())
+
+            dbAppend()
+            ENTIDADE        := "SA2"
+            CODIGO          := SA2->A2_COD
+            LOJA            := SA2->A2_LOJA
+            NOME            := SA2->A2_NOME
+            DATA_NASCIMENTO := SA2->A2_DTNASC
+            dbCommit()
+
+            SA2->(dbSkip())
+        Enddo
+    
+    tcDelFile(cAliasTab)
+
+    rpcClearEnv()
+
+Return

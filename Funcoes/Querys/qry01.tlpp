@@ -1,0 +1,22 @@
+#include 'totvs.ch'
+#include 'topconn.ch'
+
+/*/{Protheus.doc} U_WORK_QUERY_SQL
+(Função auxilar para demontrar o funcionamento de querys em Advpl)
+@type user function
+@author user
+@since 13/11/2025
+/*/
+function U_WORK_QUERY_SQL1
+
+    rpcSetEnv('99','01')
+    
+    adados := Array(1)
+   
+    cSQL   := "SELECT * FROM SA2990 WHERE D_E_L_E_T_ = ' ' ORDER BY A2_NOME"
+
+    TCQuery cSQL new alias QRY
+
+    rpcClearEnv()
+
+Return

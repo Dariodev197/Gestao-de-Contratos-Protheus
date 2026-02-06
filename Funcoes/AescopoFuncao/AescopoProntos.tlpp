@@ -1,0 +1,17 @@
+#include 'totvs.ch'
+
+/*/{Protheus.doc} U_WORK_QUERY_SQL
+(Função auxilar para demontrar o funcionamento de querys em Advpl)
+@type user function
+@author user
+@since 13/11/2025
+/*/
+function U_ESCOPO
+
+    rpcSetEnv('99','01')
+    
+
+
+    rpcClearEnv()
+
+Return

@@ -1,0 +1,39 @@
+#include "protheus.ch"
+#include "topconn.ch"
+
+/*/{Protheus.doc} U_WORK_QUERY_SQL
+(Função auxiliar para demonstrar o funcionamento de queries em AdvPL)
+@type user function
+@author user
+@since 13/11/2025
+/*/
+Function U_WORK_QUERY_SQL()
+
+    Local cSQL   := ""
+    Local aDados := {}
+
+    rpcSetEnv("99","01")
+
+    cSQL := "SELECT A2_COD, A2_LOJA, A2_NOME, A2_DTNASC " + ;
+            "FROM SA2990 WHERE D_E_L_E_T_ = ' ' " + ;
+            "ORDER BY A2_NOME"
+
+    dbUseArea(.T., "TOPCONN", TCGenQry(,,cSQL), "QRY", .F., .T.)
+
+    While !QRY->(Eof())
+
+        AAdd(aDados, { ;
+            QRY->A2_COD, ;
+            QRY->A2_LOJA, ;
+            QRY->A2_NOME, ;
+            QRY->A2_DTNASC ;
+        })
+
+        QRY->(dbSkip())
+
+    EndDo
+
+    QRY->(dbCloseArea())
+    rpcClearEnv()
+
+Return aDados
