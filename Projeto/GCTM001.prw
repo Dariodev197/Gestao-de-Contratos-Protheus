@@ -64,10 +64,14 @@ Static Function modeldef
 	Local oModel
 	Local oStruct
 	local aTrigger
-	Local bModelPre := {|x| fnModPre(x)}
-	Local bModelPos := {|x| fnModPos(x)}
-	Local bCommit   := {|x| fnCommit(x)}
-	lOCAL bCancel   := {|x| fnCancel(x)}
+	Local bModelPre  := {|x| fnModPre(x)}
+	Local bModelPos  := {|x| fnModPos(x)}
+	Local bCommit    := {|x| fnCommit(x)}
+	local bCancel    := {|x| fnCancel(x)}
+	Local bFieldPre  := {|oSubModel,cIdAction,cIdField,xValue| fnFieldPre(oSubModel,cIdAction,cIdField,xValue)}
+	Local bFieldPos  := {|oSubModel|                           fnFieldPos(oSubModel)}
+	Local bFieldLoad := {|oSubModel,lCopy|                     fnFieldLoad(oSubModel,lCopy)}
+
 
 	oStruct         := FWFormStruct(1,'Z50')
 	oModel          := mpFormModel():new('MODEL_GCTM001',bModelPre,bModelPos,bCommit,bCancel)
@@ -77,7 +81,7 @@ Static Function modeldef
 	oStruct:addTrigger(aTrigger[1],aTrigger[2],aTrigger[3],aTrigger[4])
 	oStruct:setProperty('Z50_TIPO',MODEL_FIELD_WHEN,{||INCLUI})
 
-	oModel:addFields('Z50MASTER',,oStruct)
+	oModel:addFields('Z50MASTER',,oStruct,bFieldPre,bFieldPos,bFieldLoad)
 	oModel:setDescription('Tipos De Contratos')
 	oModel:setPrimarykey({'Z50_FILIAL','Z50_CODIGO'})
 
@@ -86,7 +90,8 @@ Return oModel
 /*/{Protheus.doc} fnModPre
     (Funcao de pre validacao do modelo de dados)
     @type  Function
-    /*/
+/*/
+
 Static function fnModPre(oModel)
 
 	Local lValid      := .T.
@@ -106,7 +111,8 @@ Return lValid
 /*/{Protheus.doc} fnModPos
     (funcao de validação fina do modelo de dados , tudook)
     @type  Function
-    /*/
+ /*/
+
 Static function fnModPos(oModel)
 
 	Local lValid          := .T.
@@ -116,8 +122,6 @@ Static function fnModPos(oModel)
 
     If nOperation == 5 
     
-
-
 	      cAliasSQL       := getNextAlias()
       
 	      BeginSQL alias cAliasSQL
@@ -142,29 +146,75 @@ Return lValid
 /*/{Protheus.doc} fnCommit
     (funcao executada para gravar dados)
     @type  Function
-    /*/
+/*/
+
 Static function fnCommit(oModel)
 
 	Local lCommit := FWFormCommit(oModel)
+
+	If .not. lCommit
+		oModel:setErrorMessage(,,,,'GRAVACAO NAO EFETUADA', 'OCORREU UM ERRO NA GRAVACAO DE DADOS')
+	EndIF
 
 Return lCommit
 
 /*/{Protheus.doc} fnCancel
     (Funcao executada para cancelamento de preenchimento de dados)
     @type  Function
-    /*/
+/*/
+
 Static function fnCancel(oModel)
 
 	Local lCancel := FWFormCancel(oModel)
 
 Return lCancel
 
+/*/{ProthfnFieldPre
+	pre validação do sub modelo
+	@type  Static Function
+/*/
+
+Static function fnFieldPre(oSubModel,cIdAction,cIdField,xValue)
+
+	Local oModel  := FWModelActive()
+	Local lValid  := .T.
+
+	If cIdAction == 'SETVALUE'
+		If cIdField == 'Z50_DESCRI'
+			If empty(xValue)
+			oModel:setErrorMessage(,,,,'CAMPOVAZIO','O campo descrição precisa ser preenchido')
+			lValid := .F.
+			EndIF
+		EndIF
+	EndIF
+
+Return lValid
+
+/*/{ProthfnFieldPos
+	Validacao de tudook do sub modelo 
+	@type  Static Function
+/*/
+
+Static Function fnFieldPos(oSubModel)
+	
+	Local lValid := .T.
+
+Return lValid
+
+/*/{Protheus.doc} fnFieldLoad
+	funcao para carregamento dos dados
+	@type  Static Function
+/*/
+
+Static Function fnFieldLoad(oSubModel,lCopy)
+	
+Return formLoadField(oSubModel,lCopy)
 
 
 /*/{Protheus.doc} nomeFunction
     (long_description)
     @type  Function
-    /*/
+/*/
 
 Function U_GCTT001
 

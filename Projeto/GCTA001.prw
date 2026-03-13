@@ -58,7 +58,6 @@ Function U_GCTA001D(cAlias,nReg,nOpc)
         WHERE Z51.%notdel%
         AND Z51_FILIAL = %exp:xFilial('Z51')%
         AND Z51_TIPO = %exp:Z50->Z50_CODIGO%
-        LIMIT 1
 	EndSQL
 
 	(cAliasSQL)->(dbEval({|| lExist := .T.}),dbCloseArea())
