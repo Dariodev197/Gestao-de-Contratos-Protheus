@@ -4,7 +4,7 @@
 /*/{Protheus.doc} U_GCTA002M
     
     'Cadastro de contratos - Prototipo Modelo 3'
-    @type Tela MVC Modelo 1
+    @type Tela MVC Modelo 3 Advpl Tradicional
     @author Dario Leandro
     @since 19/02/2026
 
@@ -77,7 +77,7 @@ Function U_GCTA002M(cAlias,nReg,nOpc)
 
     //--enchoice(cAlias,nReg,nOpc,,,,,aPObj[1])
 
-    //-- Montagem do Cabeçalho
+    //-- Montagem do CabeÃ§alho
 
     regToMemory(cAlias,if(nOpc == 3,.T.,.F.),.T.)
     M->Z51_NUMERO := IF(nOpc == 3, getSxeNum('Z51','Z51_NUMERO'),Z51->Z51_NUMERO)
@@ -330,7 +330,7 @@ Static Function fnGetCols(nOpc,aHeader)
             Return aCols
         EndIF
 
-        //- ALTERAÇÃO + VISUALIZAÇÃO + EXCLUSÃO
+        //- ALTERAÃ‡ÃƒO + VISUALIZAÃ‡ÃƒO + EXCLUSÃƒO
 
         Z52->(dbSetOrder(1),dbSeek(Z51->Z51_FILIAL+Z51->Z51_NUMERO))
 
